@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CoolStory</title>
+        <link rel="stylesheet" type="text/css" href="style.css" />
+        <script type="text/javascript" src="storyboards.js"></script>
+    </head>
+    <body onload="init()">
+        <form target="_blank" action="http://www.pahgawks.com/storyboards/download.php" name="save" class="hidden" method="post">
+            <input type="text" id="formTitle" name="title" />
+            <input type="text" id="formData" name="data" />
+        </form>
+        <div id="wrapper">
+            <div id="start">
+                <div class="menu">New<input type="button" id="newButton" value="New" /></div>
+                <div class="menu">Save<input type="button" id="saveButton" value="Save" /></div>
+                <div class="menu" id="fileSelector">Open<input type="file" id="filePicker" accept="text/xml" /></div>
+                <input type="text" id="boardTitle" value="Untitled Storyboard" />
+                <a class="menu2" title="Board Settings" id="settingsButton"><span class="lsf-icon" id="gear"></span></a>
+                <a class="menu2" title="About" id="aboutButton">?</a>
+                <div class="pointer" id="settingsHelp"><div class="triangle"></div>
+                    Open the settings panel to set the project due date and check your progress.
+                    <a onclick="document.getElementById('settingsHelp').style.display='none'">Got it</a>
+                </div>
+            </div>
+            <div id="main">
+                <canvas id="stage" width="800" height="450"></canvas>
+                <div class="toolbar">
+                    <a class="button selected" id="tool0" title="Pencil"><span class="lsf-icon" id="pen"></span></a>
+                    <a class="button" id="tool1" title="Eraser"><span class="lsf-icon" id="eraser"></span></a>
+                    <a class="button" id="clear" title="Clear Canvas"><span class="lsf-icon" id="clear"></span></a>
+                    <a class="button" id="playSlides" title="Play"><span class="lsf-icon" id="play"></span></a>
+                    
+                    <div class="button" id="tool0colour" style="background-color:#000000">
+                        <input type="color" class="colour" id="colourBox" />
+                    </div>
+                    <div class="size" id="tool0size">
+                        <select id="pencilSize">
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4" selected="selected">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                        </select>
+                        <div id="preview" style="border-radius:2px; -webkit-border-radius:2px; -moz-border-radius:2px; width:4px; height:4px; margin-left:13px; margin-top:13px;"></div>
+                    </div>
+                </div>
+                
+                <div class="status">
+                    <div class="check">
+                        Rough Animation
+                        <input type="checkbox" id="rough" />
+                    </div><div class="check">
+                        Final Animation
+                        <input type="checkbox" id="final" />
+                    </div><div class="check">
+                        Colored Animation
+                        <input type="checkbox" id="colored" />
+                    </div><div class="check">
+                        Background
+                        <input type="checkbox" id="background" />
+                    </div><div class="check">
+                        Sound
+                        <input type="checkbox" id="sound" />
+                    </div><div class="check">
+                        Duration
+                        <input type="text" id="duration" /> seconds
+                    </div>
+                </div>
+                
+                <div class="clear"></div>
+            </div>
+            <div id="sidebar">
+                
+                <div class="timeline" id="timeline">
+                    
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="clear">
+                
+            </div>
+        </div>
+        <p id="output"></p>
+         <div id="save" class="lightbox">
+            <a class="closebtn" title="close" onclick = "document.getElementById('save').style.display='none';document.getElementById('fade').style.display='none'"><span class="lsf-icon" id="close"></span></a>
+            <h2>Save</h2>
+            <p><a href="#" id="download">Download file</a></p>
+        </div>
+        <div id="about" class="lightbox">
+            <a class="closebtn" title="close" onclick = "document.getElementById('about').style.display='none';document.getElementById('fade').style.display='none'"><span class="lsf-icon" id="close"></span></a>
+            <h2 id="aboutTitle">CoolStory v</h2>
+            <p>Programmed by <a href="http://www.pahgawks.com" target="_blank"><strong>Dave Pagurek</strong></a></p>
+            <h3>To Do</h3>
+            <ul>
+                <li>Make it work in more browsers than just Chrome</li>
+                <li>Add a notes/dialogue textbox for each slide</li>
+                <li>Add keyboard shortcuts for saving, opening, etc</li>
+                <li>Add Wacom tablet pressure</li>
+                <li>Add offline support</li>
+                <li>Change layout based on screen size</li>
+                <li>Integrate with Google Drive</li>
+            </ul>
+        </div>
+        <div id="settings" class="lightbox">
+            <a class="closebtn" title="close" onclick = "document.getElementById('settings').style.display='none';document.getElementById('fade').style.display='none'"><span class="lsf-icon" id="close"></span></a>
+            <h2 id="aboutTitle">Settings</h2>
+            <div class="bar">
+                <div class="datepicker">
+                    Project Start:<br /><input type="date" id="startDate" />
+                </div>
+                <div class="datepicker">
+                    Project End:<br /><input type="date" id="endDate" />
+                </div>
+            </div>
+            <div class="bar">
+                <p id="daysLeft">0 days left</p>
+                <p id="percentComplete">0% complete</p>
+                <p id="currentRate">Current Rate: 0%/day<br/>Average Rate: 0%/day</p>
+            </div>
+            <div class="horiz">
+                <p id="projection">At your current rate, you won't finish.<br />At your average rate, you won't finish.</p>
+            </div>
+        </div>
+        <div id="playback" class="lightbox">
+            <canvas id="theatre" width="800" height="450"></canvas>
+            <div class="toolbar">
+                <a class="button" id="restart" title="Restart"><span class="lsf-icon" id="refresh"></span></a>
+                <a class="button" id="back" title="Back One Slide"><span class="lsf-icon" id="left"></span></a>
+                <a class="button" id="pause" title="Play/Pause"><span class="lsf-icon" id="pause"></span></a>
+                <a class="button" id="stop" title="Stop"><span class="lsf-icon" id="stop"></span></a>
+                <a class="button" id="fwd" title="Forward One Slide"><span class="lsf-icon" id="right"></span></a>
+            </div>
+        </div>
+        <div id="loading" class="lightbox" style="display:block;">
+            <h3 id="aboutTitle">CoolStory is Loading...</h3>
+        </div>
+		<div id="fade" class="overlay"></div>
+        <div id="fade2" class="overlay" style="display:block;"></div>
+    </body>
+</html>
